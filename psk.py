@@ -101,7 +101,8 @@ psk = {
     "0":"11",
 }
 
-end = "0000"
+end = "00"
+token = "0"
 
 decode_psk = {}
 for k, v in psk.items():
@@ -131,12 +132,12 @@ def encode(string):
     result = []
     for c in bitify(string):
         result.append(psk[c])
-    return '00'.join(result) + end
+    return token.join(result) + end
 
 def decode(string):
     try:
         l = []
-        for x in string.split("00"):
+        for x in string.split(token):
             if x:
                 l.append(decode_psk[x])
         return debitify("".join(l))
