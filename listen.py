@@ -91,7 +91,7 @@ def process_bits():
     while True:
         cur_bits = []
         # while the last two characters are not the sigil
-        while len(cur_bits) < 2 or cur_bits[-len(sigil):len(cur_bits)] != sigil:
+        while not is_done(cur_bits): #len(cur_bits) < 2 or cur_bits[-len(sigil):len(cur_bits)] != sigil:
             try:
                 cur_bits.append(bits.get(False))
             except Queue.Empty:

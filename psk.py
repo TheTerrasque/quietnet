@@ -96,18 +96,49 @@ psk = {
 '~'   :"1011010111",
 }
 
+psk = {
+    "1":"1",
+    "0":"11",
+}
+
+end = "0000"
+
 decode_psk = {}
 for k, v in psk.items():
     decode_psk[v] = k
 
+def bitify(data):
+    l = []
+    for x in data:
+        l.append("{0:08b}".format(ord(x)))
+    return "".join(l)
+
+def is_done(data):
+    return data[-len(end):] == end
+
+def debitify(data):
+    l = []
+    c = 0
+    for x in range(len(data) % 8):
+        data+="0" #uglypadding
+    while c < len(data):
+        d = data[c:c+8]
+        l.append( chr(int(d, 2)) )
+        c += 8
+    return "".join(l)
+    
 def encode(string):
     result = []
-    for c in string:
+    for c in bitify(string):
         result.append(psk[c])
-    return '00'.join(result) + '00'
+    return '00'.join(result) + end
 
 def decode(string):
     try:
-        return decode_psk[''.join([str(i) for i in string])]
+        l = []
+        for x in string.split("00"):
+            if x:
+                l.append(decode_psk[x])
+        return debitify("".join(l))
     except:
         return ''
